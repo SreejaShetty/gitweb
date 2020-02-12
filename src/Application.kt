@@ -51,7 +51,7 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
 
     routing {
         get("/") {
-            call.respondText("Make It Easy", contentType = ContentType.Text.Plain)
+            call.respondText("HEALTHY", contentType = ContentType.Text.Plain)
         }
         route("/github") {
             gitHub()
