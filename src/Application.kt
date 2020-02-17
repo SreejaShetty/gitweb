@@ -13,8 +13,10 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.features.ForwardedHeaderSupport
 import io.ktor.features.XForwardedHeaderSupport
 import io.ktor.http.ContentType
+import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
+import io.ktor.routing.post
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.ShutDownUrl
@@ -55,6 +57,9 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
         }
         route("/github") {
             gitHub()
+        }
+        post("/"){
+            call.respondText("HEALTHY", contentType = ContentType.Text.Plain)
         }
     }
 }
