@@ -1,5 +1,6 @@
 package com.suryadigital.automatedturk
 
+import com.google.gson.Gson
 import com.suryadigital.automatedturk.github.gitHub
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -12,6 +13,7 @@ import io.ktor.features.*
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.request.receive
+import io.ktor.request.receiveText
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
@@ -20,6 +22,9 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.ShutDownUrl
 import org.slf4j.event.Level
+import java.awt.List
+import java.text.DateFormat
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -42,6 +47,8 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
             setPrettyPrinting()
             serializeSpecialFloatingPointValues()
             enableComplexMapKeySerialization()
+            setDateFormat(DateFormat.LONG)
+            setPrettyPrinting()
         }
     }
     install(DefaultHeaders) {
@@ -65,18 +72,11 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
             gitHub()
         }
         post("/"){
-            call.respondText("HEALTHY", contentType = ContentType.Text.Plain)
+            val json = call.receive<String>()
+            print(json)
+            call.respondText(json)
         }
-        post("/re"){
-            val req= call.receive<Commit>()
-            call.respond(req)
-//            val check=req.message
-//            if (check==null){
-//
-//            } else print(check)
 
-        }
     }
 }
 
-data class Commit (val id:String,val tree_id:String,val distinct:Boolean,val message:String)
