@@ -8,11 +8,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.features.UserAgent
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logging
-import io.ktor.features.CallLogging
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.ForwardedHeaderSupport
-import io.ktor.features.XForwardedHeaderSupport
+import io.ktor.features.*
+import io.ktor.gson.gson
 import io.ktor.http.ContentType
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.get
@@ -38,6 +37,13 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
         level = Level.INFO
     }
 
+    install(ContentNegotiation){
+        gson{
+            setPrettyPrinting()
+            serializeSpecialFloatingPointValues()
+            enableComplexMapKeySerialization()
+        }
+    }
     install(DefaultHeaders) {
         header("X-Engine", "Ktor")
     }
@@ -61,5 +67,16 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
         post("/"){
             call.respondText("HEALTHY", contentType = ContentType.Text.Plain)
         }
+        post("/re"){
+            val req= call.receive<Commit>()
+            call.respond(req)
+//            val check=req.message
+//            if (check==null){
+//
+//            } else print(check)
+
+        }
     }
 }
+
+data class Commit (val id:String,val tree_id:String,val distinct:Boolean,val message:String)
