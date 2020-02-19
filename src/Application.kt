@@ -1,6 +1,8 @@
 package com.suryadigital.automatedturk
 
 import com.google.gson.Gson
+import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
 import com.suryadigital.automatedturk.github.gitHub
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -73,10 +75,18 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
         }
         post("/"){
             val json = call.receive<String>()
+            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
             print(json)
+            print(moshi)
             call.respondText(json)
+            // val msg=obj.commits
+            //val obj=gson.parse
         }
-
     }
 }
+
+
+
+
+
 
