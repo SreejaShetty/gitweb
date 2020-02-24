@@ -84,11 +84,10 @@ fun Application.module(@Suppress("UNUSED_PARAMETER") testing: Boolean = false) {
             val obj3 = obj2.get("message")
             print(obj3)
             println()
-
-
         }
     }
 }
+
 
 
 
